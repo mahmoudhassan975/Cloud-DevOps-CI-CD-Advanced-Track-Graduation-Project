@@ -73,7 +73,10 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
+      - checkout
       # Restore from cache
+      - restore_cache:
+          keys: [frontend-build]
       # Your job code here
       - run:
           name: Front-end test
@@ -88,12 +91,15 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
+      - checkout
       # Restore from cache
+      - restore_cache:
+          keys: [backend-build]
       # Your job code here
       - run:
-          name: Front-end test
+          name: Back-end test
           command: |
-            cd frontend
+            cd backend
             npm install
             npm run test
             

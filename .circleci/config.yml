@@ -185,11 +185,20 @@ jobs:
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                 --filters "Name=tag:project,Values=udapeople" \
                 --output text >> ~/inventory.txt
-            cat inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+  show_aws_hostname:
+    docker:
+      - image: cibuilds/aws:1.16.1
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - run:
+          command: cat project/.circleci/ansible/inventory.txt
+
       # Here's where you will add some code to rollback on failure
       - destroy-environment
 

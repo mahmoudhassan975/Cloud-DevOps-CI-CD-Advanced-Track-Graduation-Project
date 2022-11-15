@@ -197,7 +197,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          command: cat project/.circleci/ansible/inventory.txt
+          command: cat inventory.txt
 
       # Here's where you will add some code to rollback on failure
       - destroy-environment

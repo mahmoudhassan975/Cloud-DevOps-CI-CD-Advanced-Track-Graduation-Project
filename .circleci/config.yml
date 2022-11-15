@@ -183,7 +183,7 @@ jobs:
             aws ec2 describe-instances \
             \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                --filters "Name=tag:project,Value=udapeople" \
+                --filters "Name=tag:project,Values=udapeople" \
                 --output text >> ~/inventory
       - persist_to_workspace:
           root: ~/

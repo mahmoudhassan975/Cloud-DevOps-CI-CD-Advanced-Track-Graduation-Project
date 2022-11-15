@@ -339,7 +339,6 @@ workflows:
     jobs:
       - show_aws_hostname:
           reauires: [deploy-infrastructure]
-            -
       # - build-frontend
       # - build-backend
       # - test-frontend:

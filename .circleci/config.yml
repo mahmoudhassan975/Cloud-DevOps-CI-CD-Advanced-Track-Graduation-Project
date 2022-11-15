@@ -189,25 +189,30 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
+
   show_aws_hostname:
     docker:
       - image: cibuilds/aws:1.16.1
     steps:
       - checkout
       - attach_workspace:
-          at: ~/
+          at: ~/project/.circleci/ansible/
       - run:
           command: cat inventory.txt
 
-      # Here's where you will add some code to rollback on failure
-      - destroy-environment
 
 #   configure-infrastructure:
 #     docker:
 #       # Docker image here that supports Ansible
+        # - image: python:3.7.11-alpine3.13
 #     steps:
 #       # Checkout code from git
+        # - checkout
 #       # Add ssh keys with fingerprint
+        # - add_ssh_keys:
+        #     fingerprints: ["d5:22:17:f0:22:26:ee:e2:82:e0:c7:f9:45:bb:1c:45"]
 #       # attach workspace
 #       - run:
 #           name: Install dependencies

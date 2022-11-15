@@ -198,9 +198,9 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/project/.circleci/ansible/
+          at: ~/
       - run:
-          command: cat inventory.txt
+          command: cat ~/project/.circleci/ansible/inventory.txt
 
 
 #   configure-infrastructure:

@@ -1,0 +1,10 @@
+---
+- name: "extract the artifact"
+  shell: tar -xvfz artifact.tar.gz
+
+- name: "install npm"
+  shell: npm install
+
+- name: "start pm2"
+  shell: pm2 stop default
+  shell: pm2 start npm -- start       

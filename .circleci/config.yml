@@ -349,8 +349,8 @@ jobs:
 workflows:
   default:
     jobs:
-      - show_aws_hostname:
-          requires: [deploy-infrastructure]
+      # - show_aws_hostname:
+      #     requires: [deploy-infrastructure]
       - build-frontend
       - build-backend
       - test-frontend:

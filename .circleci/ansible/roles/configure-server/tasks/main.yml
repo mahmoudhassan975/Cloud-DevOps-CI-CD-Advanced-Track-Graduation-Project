@@ -1,4 +1,9 @@
 ---
+- name: "download node 13"
+  become: true
+  shell: |
+    curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+
 - name: "upgrade packages."
   become: true
   apt:

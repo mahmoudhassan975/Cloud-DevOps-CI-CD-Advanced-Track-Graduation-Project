@@ -7,7 +7,7 @@ commands:
       - run:
           name: Install AWS CLI
           command: |
-            $ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
   destroy-environment:
@@ -231,9 +231,9 @@ jobs:
           command: |
             # Your code here
             apk add --update ansible
-            apk add --update aws-cli
-            apk add --update tar
-            apk add --update gzip
+            # apk add --update aws-cli
+            # apk add --update tar
+            # apk add --update gzip
       - run:
           name: Configure server
           command: |

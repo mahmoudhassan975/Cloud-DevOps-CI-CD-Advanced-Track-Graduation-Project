@@ -4,10 +4,10 @@
   shell: |
     curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
 
-- name: "upgrade packages."
-  become: true
-  apt:
-    upgrade: "yes"
+# - name: "upgrade packages."
+#   become: true
+#   apt:
+#     upgrade: "yes"
 
 - name: "install dependencies."
   become: true

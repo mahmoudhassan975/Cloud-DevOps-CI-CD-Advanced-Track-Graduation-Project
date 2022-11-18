@@ -315,8 +315,13 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
+            npm install
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/frontend/dist
       - destroy-environment
       - revert-migrations
 
@@ -343,6 +348,7 @@ jobs:
           name: Package Backend
           command: |
             cd backend
+            npm install
             npm run build
             tar -czf artifact.tar.gz dist/* package*
 

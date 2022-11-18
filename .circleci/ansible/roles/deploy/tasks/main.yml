@@ -6,14 +6,14 @@
     
 - name: "unarchive backend files"
   unarchive:
-    src: /home/artifact.tar.gz
+    src: artifact.tar.gz
     dest: ~/backend-app
 
-- name: Copy backend files
-  become: true
-  copy:
-      src: /home/artifact.tar.gz
-      dest: /home/ubuntu/artifact.tar.gz
+# - name: Copy backend files
+#   become: true
+#   copy:
+#       src: /home/artifact.tar.gz
+#       dest: /home/ubuntu/artifact.tar.gz
 
 - name: "install node dependencies"
   shell: |

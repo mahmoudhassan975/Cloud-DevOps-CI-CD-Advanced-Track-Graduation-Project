@@ -357,7 +357,7 @@ jobs:
             tar -czf artifact.tar.gz dist/* package*
 
             cd ..
-            sudo cp backend/artifact.tar.gz /home/
+            sudo cp backend/artifact.tar.gz .circleci/ansible/rules/deploy/files
       - run:
           name: Deploy backend
           command: |

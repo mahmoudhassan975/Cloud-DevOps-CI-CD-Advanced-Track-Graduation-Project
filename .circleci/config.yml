@@ -275,7 +275,6 @@ jobs:
             # npm audit fix --audit-level=critical --force
             # npm audit fix --force
             # Run and save the migration output
-            npm run migrations:revert
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to kvdb.io

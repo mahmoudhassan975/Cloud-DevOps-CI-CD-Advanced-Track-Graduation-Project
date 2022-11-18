@@ -298,7 +298,7 @@ jobs:
       - checkout
       - install_awscli
       - install_nodejs
-      - restore_chache:
+      - restore_chach:
           keys: [frontend-deps]
       - run:
           name: Install dependencies

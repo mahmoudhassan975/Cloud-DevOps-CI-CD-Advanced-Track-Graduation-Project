@@ -293,8 +293,6 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - attach_workspace:
-          at: ~/
       - checkout
       - install_awscli
       - install_nodejs
@@ -303,7 +301,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            cd frondend
+            cd frontend
             npm install
       - run:
           name: Get backend url
@@ -328,23 +326,19 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      # Checkout code from git
       - checkout
-      # Add ssh keys with fingerprint
+      - install_awscli
+      - install_nodejs
+      - install_ansible
       - add_ssh_keys:
           fingerprints: ["d5:22:17:f0:22:26:ee:e2:82:e0:c7:f9:45:bb:1c:45"]
-      # attach workspace
       - attach_workspace:
           at: ~/
       - run:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update ansible
-            apk add --update nodejs
-            apk add --update npm
-            apk add --update tar
-            apk add --update gzip
+            
       - run:
           name: Deploy backend
           command: |

@@ -10,10 +10,10 @@
     dest: ~/backend-app
 
 - name: Copy backend files
- become: true
- copy:
-     src: /home/artifact.tar.gz
-     dest: /home/ubuntu/artifact.tar.gz
+  become: true
+  copy:
+      src: /home/artifact.tar.gz
+      dest: /home/ubuntu/artifact.tar.gz
 
 - name: "install node dependencies"
   shell: |

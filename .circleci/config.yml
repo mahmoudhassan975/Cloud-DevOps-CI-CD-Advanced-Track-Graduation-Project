@@ -44,6 +44,26 @@ commands:
              npm install
              npm run migration:revert
             fi
+  
+  install_ansible:
+    description: Instyall Ansible
+    steps:
+      - run:
+        name: Install Ansible
+        command: |
+          sudo apt update
+          sudo apt install software-properties-common -y
+          sudo add apt repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible -y
+  
+  install_nodejs:
+    description: Install Node.js 13
+    steps:
+      - run:
+          name: Install Node.js 13
+          command: |
+            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+            sudo apt install -y node.js
 
 jobs:
   build-frontend:
@@ -216,7 +236,6 @@ jobs:
 
   configure-infrastructure:
     docker:
-      # Docker image here that supports Ansible
       - image: python:3.7.11-alpine3.13
     steps:
       # Checkout code from git
@@ -272,51 +291,42 @@ jobs:
 
   deploy-frontend:
     docker:
-      # Docker image here that supports AWS CLI
-      - image: python:3.7.11-alpine3.13
+      - image: cimg/base:stable
     steps:
       - attach_workspace:
           at: ~/
-      # Checkout code from git
       - checkout
+      - install_awscli
+      - install_nodejs
+      - rstore_chache:
+          keys: [frontend-deps]
       - run:
           name: Install dependencies
           command: |
-            # your code here
-            apk add --update tar
-            apk add --update aws-cli
-            apk add --update node
-            apk add --update npm
+            cd frondend
+            npm install
       - run:
           name: Get backend url
           command: |
-            # your code here
-            # export API_URL="http://${BACKEND_IP}:3030"
-            # echo "${API_URL}"
-            export BACKEND_IP=$(aws ec2 describe-instances \
-            \
+            BACKEND_IP=$(aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                --filters "Name=tag:project,Values=udapeople")
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "API_URL = ${API_URL}"
-            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+                --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                --output text)
+
+            echo "API_URL=http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
             cd frontend
-            npm install
             npm run build
-            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      # Here's where you will add some code to rollback on failure
       - destroy-environment
+      - revert_migrations
 
   deploy-backend:
     docker:
-      # Docker image here that supports Ansible
-      - image: python:3.7.11-alpine3.13
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       - checkout
@@ -433,8 +443,8 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
       # - deploy-backend:
       #     requires: [run-migrations]
       # - smoke-test:

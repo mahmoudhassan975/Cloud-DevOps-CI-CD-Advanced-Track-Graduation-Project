@@ -222,17 +222,6 @@ jobs:
       # Here's where you will add some code to rollback on failure
       - destroy-environment
 
-  # show_aws_hostname:
-  #   docker:
-  #     - image: cibuilds/aws:1.16.1
-  #   steps:
-  #     - checkout
-  #     - attach_workspace:
-  #         at: ~/
-  #     - run:
-  #         command: cat ~/project/.circleci/ansible/inventory.txt 
-
-
   configure-infrastructure:
     docker:
       - image: python:3.7.11-alpine3.13
@@ -445,7 +434,7 @@ jobs:
       - install_nodejs
       - install_awscli
       - run:
-          name: Get old stack workflow id
+          name: Get old stack workflow id & Remove old stacks and files
           command: |
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
@@ -453,10 +442,6 @@ jobs:
             export OldWorkflowID=(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id)
             echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
             export STACKS=[] #put the list of stacks here
-
-      - run:
-          name: Remove old stacks and files
-          command: |
             if [[ "${STACKS[@]" =~ "${OldWorkflowID}" ]]
             then
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
@@ -470,8 +455,6 @@ jobs:
 workflows:
   default:
     jobs:
-      # - show_aws_hostname:
-      #     requires: [deploy-infrastructure]
       - build-frontend
       - build-backend
       - test-frontend:

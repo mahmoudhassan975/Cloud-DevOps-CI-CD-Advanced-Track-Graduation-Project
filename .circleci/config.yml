@@ -450,6 +450,7 @@ jobs:
               echo cleaning confirmed
             else
               echo nothing to clean
+            fi
 
 
 workflows:
